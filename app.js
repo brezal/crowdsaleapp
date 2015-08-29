@@ -485,8 +485,8 @@ function userView(req, res, error, data) {
 
           // will need to push to remove this cose after sale done
           var btcRepPercentage = req.user.customData.balance / augurBalance;
-          if (req.user.customData.repPercentage < btcRepPercentage || !req.user.customData.repPercentage) {
-            req.user.customData.repPercentage = btcRepPercentage;
+          if (req.user.customData.repPercentage < repPercentage || !req.user.customData.repPercentage) {
+            req.user.customData.repPercentage = repPercentage;
             req.user.save(function(err) { if (err) console.error(err) });
           }
 
@@ -517,8 +517,8 @@ function userView(req, res, error, data) {
             btcBalance: btcInfo.balance,
             btcAddress: btcAddress,
             referralCode: req.user.customData.referralCode,
-            repPercentage: (repPercentage * 100).toFixed(8),
-            repAmount: (repPercentage * 8800000).toFixed(8),
+            repPercentage: (req.user.customData.repPercentage * 100).toFixed(8),
+            repAmount: (req.user.customData.repPercentage * 8800000).toFixed(8),
             totalEther: ethInfo.total,
             ethBalance: ethInfo.balance,
             ethBtcExchangeRate: exchangeRate,
