@@ -485,7 +485,7 @@ function userView(req, res, error, data) {
 
           // will need to push to remove this cose after sale done
           var btcRepPercentage = req.user.customData.balance / augurBalance;
-          if (req.user.customData.repPercentage < repPercentage || !req.user.customData.repPercentage) {
+          if (req.user.customData.repPercentage <= repPercentage || !req.user.customData.repPercentage || req.user.customData.repPercentage >= repPercentage) {
             req.user.customData.repPercentage = repPercentage;
             req.user.save(function(err) { if (err) console.error(err) });
           }
