@@ -31,7 +31,7 @@ html
           p.crypto-raised
             <span class="amount-raised">0.0000</span> BTC<br>
             <span class="ether-raised">#{ totalEther }</span> ETH <br>
-            <span class="accounts"> 3819 </span> Accounts
+            <span class="accounts"> 3858 </span> Accounts
           p.usd-raised
             <b>$<span id="usd-equivalent" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="at current exchange rates">0.00</span> <i>USD</i>*</b> raised <span class="bracket">{</span>
 
@@ -50,7 +50,7 @@ html
           else
             h2 Hello
 
-          h4 You own <b data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Percentage is an estimate. Final reputation will be calulated after sale."><span id="rep-amount-display">#{ repAmount }</span> (<span id="rep-percentage-display">#{ repPercentage }</span>%) Reputation*</b> after spending <b><span id="btc-purchase-total">#{ btcBalance }</span> BTC</b> and <b><span id="eth-purchase-total">#{ ethBalance }</span> ETH </b>
+          h4 You own <b data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Percentage is an estimate. Final reputation will be calulated after sale including bonuses."><span id="rep-amount-display">#{ repAmount }</span> (<span id="rep-percentage-display">#{ repPercentage }</span>%) Reputation*</b> after spending <b><span id="btc-purchase-total">#{ btcBalance }</span> BTC</b> and <b><span id="eth-purchase-total">#{ ethBalance }</span> ETH </b>
           h4
             small.disclaimer Note: Your REP % will change as the auction progresses!  Your projected REP balance is based on your % contribution to the total crowdsale, so it will change as the crowdsale grows.  Please see the section "How does the live-action model work?" in our <a href="http://www.augur.net/blog/the-augur-crowdsale">crowdsale post</a> that goes into more detail on why the sale is structured this way.
           .row
@@ -107,7 +107,7 @@ html
 
             .col-sm-12
               h4 Ether buy-in not showing up correctly?
-              p Enter your Ethereum address you bought in with here to check your REP buy-in:
+              p Enter your Ethereum address you bought in with here to check your REP bought with Ether:
               .input-group
                 input.form-control(type="text", id="check-ether-address", placeholder="Ethereum address")
                 span.input-group-btn
@@ -124,6 +124,7 @@ html
                 <p>To continue funding our ambitious project of the World's first decentralized, prediction market, we are selling <b>Reputation</b> in Augur.</p>
                 <p>The owners of Reputation form the distributed oracle that determines the outcome of market events.  See the video below for a brief introduction of how this works and <a href="http://www.augur.net/blog/what-is-reputation">our blog post</a> for a more in-depth look.  You will own rep in proportion to the amount of funds you send, <b>plus an added bonus if you buy in early.</b> </p>
                 <p> Questions? Check out our <a href="https://augur.zendesk.com/hc/en-us"> FAQ </a> and <a href="http://slackinaugur.herokuapp.com"> Slack </a> </p>
+                <p> For more on <a href="https://www.youtube.com/watch?v=yegyih591Jo">How Augur Works</a> checkout our <a href="https://www.youtube.com/watch?v=yegyih591Jo">video</a> </p>
             .col-sm-5.col-sm-offset-1
               p.login
                 a.btn.btn-primary.btn-lg(href="/login") Login and get started!
@@ -218,6 +219,7 @@ html
         .modal-content
           button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
           h4 Buying in with Ether?
+          h5 FAQ:
           h5 If you haven't installed Ethereum yet...
           p We recommend <a href="https://ethereum.org/cli" target="_blank">installing geth</a>, the Go Ethereum client, as it is both the easiest client to use and has been audited for security.  WARNING: Do NOT send Ether from an exchange address.
           h5 Need to import your Ethereum pre-sale wallet?
@@ -242,7 +244,7 @@ html
       .modal-dialog.modal-md          
         .modal-content
           button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
-          h5 WARNING
+          h5 Heads Up
           p If you haven't updated or installed Ethereum since August 20, you need to update otherwise your chain will fail to get past <a href="https://blog.ethereum.org/2015/08/20/security-alert-consensus-issue/">block 116,522</a> and you won't be able to confirm your buy in.  To update on Linux run
           p.code-block sudo apt-get update && sudo apt-get upgrade
           p To update on OS X run
@@ -254,6 +256,8 @@ html
           p You'll then have to download blocks again.
           form
             .form-group.clearfix
+              button.btn.btn-primary.pull-left(type="button", data-toggle="modal",
+              data-target="#ether-buyin-modal-1", onclick="$('#ether-buyin-modal-2').modal('hide');") Back
               button.btn.btn-primary.pull-right(type="button", data-toggle="modal",
               data-target="#ether-buyin-modal-3",
               onclick="$('#ether-buyin-modal-2').modal('hide');") Got it!
@@ -371,7 +375,7 @@ html
           h5 If geth displays the amount you just sent...
           p Congratulations!  You've successfully completed your purchase.  Your Reputation tokens will be available when Augur launches (current estimate: Q1 2016) at the address you chose to buy in with. Thanks for helping us bring the wisdom of the crowd to everyone!
           h5 If geth doesn't show the amount you sent...
-          p First, wait another minute and try again; sometimes the network can be a bit slow.  If your purchase still isn't showing up, please contact us using the chat window in the lower left-hand corner of your screen, or shoot us an email at <a href="mailto:support@augur.net">support@augur.net</a> and we'll get back to you as quick as we can!
+          p First, wait another minute and try again; sometimes the network can be a bit slow.  If your purchase still isn't showing up, please contact us using the chat window in the lower left-hand corner of your screen, or shoot us an email at <a href="mailto:support@augur.net">support@augur.net</a> and we'll get back to you as quick as we can!  Note: a common cause of this is due to not being on the latest Geth - 1.1.0, if you've updated or installed it after August 20 you're all set.
           form
             .form-group.clearfix
               button.btn.btn-primary.pull-left(type="button", data-toggle="modal",
