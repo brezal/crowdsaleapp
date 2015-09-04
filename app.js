@@ -302,13 +302,13 @@ app.get('/', function(req, res) {
 
   if (!req.user) {
 
-    //var totalEther = getTotalEtherReceived();
-    //if (totalEther) totalEther = +(totalEther.toPrecision(10));
+    var totalEther = getTotalEtherReceived();
+    if (totalEther) totalEther = +(totalEther.toPrecision(10));
 
     res.render('home', {
-      //totalEther: totalEther,
-      //ethBtcExchangeRate: exchangeRate,
-      //btcUsdExchangeRate: btcUsdExchangeRate,
+      totalEther: totalEther,
+      ethBtcExchangeRate: exchangeRate,
+      btcUsdExchangeRate: btcUsdExchangeRate,
       csrf_token: createToken(generateSalt(10), process.env.CSRFSALT),
       saleStarted: getSaleStarted(req, res)
     });
