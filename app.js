@@ -306,9 +306,9 @@ app.get('/', function(req, res) {
     if (totalEther) totalEther = +(totalEther.toPrecision(10));
 
     res.render('home', {
-      totalEther: 0,
-      ethBtcExchangeRate: 0,
-      btcUsdExchangeRate: 0,
+      totalEther: totalEther,
+      ethBtcExchangeRate: exchangeRate,
+      btcUsdExchangeRate: btcUsdExchangeRate,
       csrf_token: createToken(generateSalt(10), process.env.CSRFSALT),
       saleStarted: getSaleStarted(req, res)
     });
