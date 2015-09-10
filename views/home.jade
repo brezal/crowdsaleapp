@@ -56,9 +56,9 @@ html
             if saleStarted
               .buy-options.clearfix
                 .col-sm-4.centered
-                  button.btn.btn-warning.btn-lg.btn-buy.bitcoin(type="button", data-toggle="modal", data-target="#pay-with-bitcoin-modal") Pay with Bitcoin
-                .col-sm-4.centered
                   button.btn.btn-primary.btn-lg.btn-buy.ether(type="button", data-toggle="modal", data-target="#ether-buyin-modal-1") Pay with Ether
+                .col-sm-4.centered
+                  button.btn.btn-warning.btn-lg.btn-buy.bitcoin(type="button", data-toggle="modal", data-target="#pay-with-bitcoin-modal") Pay with Bitcoin
                 .col-sm-4.centered
                   a(onclick="shapeshift_click(this, event);" href="https://shapeshift.io/shifty.html?destination=#{ btcAddress }&amp;output=BTC")
                     img.ss-button(src="https://shapeshift.io/images/shifty/xs_dark_altcoins.png")
