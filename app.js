@@ -144,10 +144,22 @@ http.request({
 
 // setup stormpath
 app.use(stormpath.init(app, {
-
-  apiKeyId: process.env.STORMPATHID,
-  apiKeySecret: process.env.STORMPATHSECRET,
-  application: 'https://api.stormpath.com/v1/applications/62cfhD5ihSuFHvjaZ1DxI3',
+  client: {
+  	apiKey: {
+  		apiKeyId: process.env.STORMPATHID,
+  		apiKeySecret: process.env.STORMPATHSECRET
+  	}
+  },
+  application: {
+  	href: 'https://api.stormpath.com/v1/applications/62cfhD5ihSuFHvjaZ1DxI3'
+  },
+  web: {
+  	login: {
+  		view: __dirname + '/views/stormpath/login.jade',
+  	}
+  },
+  website: true,
+  api: true,
   secretKey: process.env.APPSECRET,
   expandCustomData: true,
   loginView: __dirname + '/views/stormpath/login.jade',
