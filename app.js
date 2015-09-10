@@ -146,8 +146,8 @@ http.request({
 app.use(stormpath.init(app, {
   client: {
   	apiKey: {
-  		apiKeyId: process.env.STORMPATHID,
-  		apiKeySecret: process.env.STORMPATHSECRET
+  		id: process.env.STORMPATHID,
+  		secret: process.env.STORMPATHSECRET
   	}
   },
   application: {
