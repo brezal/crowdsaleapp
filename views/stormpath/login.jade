@@ -123,6 +123,10 @@ block body
                 include facebook_login_form.jade
               if stormpathConfig.socialProviders.google.enabled
                 include google_login_form.jade
+              span.
+                Clef Magical 2FA Login
+              a(href="http://sale.augur.net/clef" disabled)
+                script(type="text/javascript" src="https://clef.io/v3/clef.js" data-state="#{csrf_token}" class="clef-button" data-app-id="#{process.env.CLEFID}" data-color="white" data-style="flat" data-redirect-url="http://sale.augur.net/clef" data-type="login")
 
         if stormpathConfig.web.verifyEmail.enabled
           a.forgot(style="float:left", href="#{stormpathConfig.web.verifyEmail.uri}") Resend Verification Email?
