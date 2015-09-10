@@ -176,14 +176,11 @@ app.use(stormpath.init(app, {
       }
     },
   	login: {
-  		view: __dirname + '/views/stormpath/login.jade',
-  	},
-  	login: {
-  		"enabled": false,
+  		"enabled": true,
         "autoLogin": true,
         "uri": "/login",
         "nextUri": "/",
-        "view": "login"
+        "view": __dirname + '/views/stormpath/login.jade',
     },
 	social: {
 	    facebook: {
