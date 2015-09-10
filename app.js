@@ -150,12 +150,12 @@ app.use(stormpath.init(app, {
   		secret: process.env.STORMPATHSECRET
   	},
   	cacheManager: {
-  	  "defaultTtl": 1,
-      "defaultTti": 1,
-      "caches": {
-        "account": {
-          "ttl": 150,
-          "tti": 150
+  	  defaultTtl: 1,
+      defaultTti: 1,
+      caches: {
+        account: {
+          ttl: 150,
+          tti: 150
         }
       }
   	}
@@ -166,21 +166,21 @@ app.use(stormpath.init(app, {
   },
   web: {
   	oauth2:{
-      "enabled": true,
-      "uri": "/oauth/token",
-      "client_credentials":{
-        "enabled": true,
-        "accessToken":{
-          "ttl": 3600
+      enabled: true,
+      uri: "/oauth/token",
+      client_credentials:{
+        enabled: true,
+        accessToken:{
+          ttl: 3600
         }
       }
     },
   	login: {
-  		"enabled": true,
-        "autoLogin": true,
-        "uri": "/login",
-        "nextUri": "/",
-        "view": __dirname + '/views/stormpath/login.jade',
+  		enabled: true,
+        autoLogin: true,
+        uri: "/login",
+        nextUri: "/",
+        view: __dirname + '/views/stormpath/login.jade',
     },
 	social: {
 	    facebook: {
