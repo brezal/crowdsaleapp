@@ -176,6 +176,7 @@ app.use(stormpath.init(app, {
       }
     },
   	login: {
+        view: __dirname + '/views/stormpath/login.jade',
   		enabled: true,
         autoLogin: true,
         uri: "/login",
