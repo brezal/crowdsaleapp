@@ -148,15 +148,53 @@ app.use(stormpath.init(app, {
   	apiKey: {
   		id: process.env.STORMPATHID,
   		secret: process.env.STORMPATHSECRET
+  	},
+  	cacheManager: {
+  	  "defaultTtl": 1,
+      "defaultTti": 1,
+      "caches": {
+        "account": {
+          "ttl": 150,
+          "tti": 150
+        }
+      }
   	}
   },
+  connectionTimeout: 60,
   application: {
-  	href: 'https://api.stormpath.com/v1/applications/62cfhD5ihSuFHvjaZ1DxI3'
+  	href: 'https://api.stormpath.com/v1/applications/62cfhD5ihSuFHvjaZ1DxI3',
   },
   web: {
+  	oauth2:{
+      "enabled": true,
+      "uri": "/oauth/token",
+      "client_credentials":{
+        "enabled": true,
+        "accessToken":{
+          "ttl": 3600
+        }
+      }
+    },
   	login: {
   		view: __dirname + '/views/stormpath/login.jade',
-  	}
+  	},
+  	login: {
+  		"enabled": false,
+        "autoLogin": true,
+        "uri": "/login",
+        "nextUri": "/",
+        "view": "login"
+    },
+	social: {
+	    facebook: {
+	    appId: process.env.FBID,
+	    appSecret: process.env.FBSECRET,
+	    },
+	    google: {
+	    clientId: process.env.GOOGLEID,
+	    clientSecret: process.env.GOOGLESECRET,
+	    },
+	  },
   },
   website: true,
   api: true,
@@ -596,7 +634,9 @@ function generateSalt(length) {
   return r.join('');
 }
 
-app.listen(process.env.PORT || 3000);
+app.on('stormpath.ready', function() {
+	app.listen(process.env.PORT || 3000);
+});
 
 module.exports = router
 module.exports = stormpath
