@@ -1,0 +1,758 @@
+html
+  head
+    title="Augur - Fund the Future"
+
+    link(rel="icon" type="image/png" href="/imsges/favicon-32x32.png" sizes="32x32")
+    link(rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96")
+    link(rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16")
+    link(href="/css/flipclock.css", rel='stylesheet')
+    link(href='/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/css/google-fonts.css', rel='stylesheet')
+    link(href='/css/style.css', rel='stylesheet')
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript" data-bablic="55d0f1943225b74e4d00350c" src="/js/bablic.js"></script>
+    script(src="/js/google-corechart.js")
+    script(src="/js/vendor/jquery.min.js")
+    script(src="/js/vendor/bootstrap.min.js")
+    script(src="/js/vendor/picturefill.js")
+    script(src="/js/vendor/flipclock.js")
+    script(src="/js/Blob.js")
+    script(src="/js/FileSaver.js")
+    script.
+      function shapeshift_click(a,e){e.preventDefault();var link=a.href;window.open(link,'1418115287605','width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,left=0,top=0');return false;}
+
+  body
+    section.brand
+      .container
+        img.logo(src="/images/augur_logo_600.png" alt="augur logo")
+        h4.funds-raised.clearfix
+          p.crypto-raised
+            <span class="amount-raised">0.0000</span> BTC<br>
+            <span class="ether-raised">#{ totalEther }</span> ETH <br>
+            <span class="accounts"> 4851 </span> Accounts
+          p.usd-raised
+            <b>$<span id="usd-equivalent" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="at avg exchange rates for last 24 hours of sale">0.00</span> <i>USD</i>*</b> raised <span class="bracket">{</span>   
+          
+        ul.list-group.schedule.center-block
+            li.list-group-item <span>Oct 1st, 12:00pm (EST)</span> <b> Sale Ended</b>
+    section.action
+      .container
+        if user
+          if user.fullName
+            h2 Hello, <b>#{ user.fullName }</b>
+          else if user.email
+            h2 Hello, <b>#{ user.email }</b> 
+          else
+            h2 Hello
+
+          h4 You own <b data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Percentage includes all bonuses (i.e. early buyins)."><span id="rep-amount-display">#{ repAmount }</span> (<span id="rep-percentage-display">#{ repPercentage }</span>%) Reputation*</b> after spending <b><span id="btc-purchase-total">#{ btcBalance }</span> BTC</b> and <b><span id="eth-purchase-total">#{ ethBalance }</span> ETH </b>
+          h4
+            small.disclaimer Note: Your REP balance is based on your % contribution to the total crowdsale.  Please see the section "How does the live-action model work?" in our <a href="http://www.augur.net/blog/the-augur-crowdsale">crowdsale post</a> that goes into more detail on why the sale is structured this way.
+          .row
+            if saleStarted
+              h4.check-back The Augur token sale has concluded!<br />Thanks so much to everyone who participated.  You're helping to change the world.<br />- The Augur Team
+
+              if ethereumAddress
+                .col-sm-12
+                  .ethereum-address
+                    h5 REP purchased with Bitcoin or Altcoins will be associated with the Ethereum address set here.
+                    p You may change your payout address at any time up until the official launch of Augur.  We will notify you prior to this and confirm this address.
+                    form.center-block.set(method='post', role='form')
+                      .input-group
+                        input.form-control(name="ethereumAddress", data-container="body", value="#{ ethereumAddress }", disabled)
+                        span.input-group-btn
+                          button.btn.btn-default(type="button", onclick="editEthereumAddress()") Change
+                    form.center-block.unset(method='post', role='form', style="display: none;")
+                      .input-group
+                        input.form-control(name="ethereumAddress", data-container="body", placeholder="Enter your Ethereum address", data-toggle="popover", data-placement="bottom", title="WARNING!", data-trigger="focus", data-content="This must be a valid Ethereum address you have the private key to and not an exchange address or similar.", value="#{ ethereumAddress }")
+                        span.input-group-btn
+                          button.btn.btn-default(type="button", onclick="cancelEdit()") Cancel
+                          button.btn.btn-default(type="button", data-toggle="modal", data-target="#create-account-modal") Create
+                          button.btn.btn-primary(type="submit") Save
+                    p <b>If you bought in with Ether</b>, you do not need to set a separate payout address.  Your payout will be sent automatically to the address(es) you bought in with.  If you bought in with Ether and want your REP sent to an address different than the one you sent your Ether from, please <a href="mailto:support@augur.net">contact us</a>!
+              else
+                .col-sm-12
+                  .ethereum-address
+                    h5 A valid Ethereum address is required to receive REP purchased with Bitcoin or Altcoins.
+                    p If you already have a valid Ethereum address and <b>possess a private-key</b> for it (i.e., it is not an address generated for you by a coin exchange), you can use that to receive your REP.  Alternatively, you can <b>create one here</b>.
+                    form(method='post', role='form')
+                      .input-group
+                        input.form-control(name="ethereumAddress", data-container="body", placeholder="Enter your Ethereum address")
+                        span.input-group-btn
+                          button.btn.btn-default(type="button", data-toggle="modal", data-target="#create-account-modal") Create
+                          button.btn.btn-primary(type="submit") Save
+                    p <b>If you bought in with Ether</b>, you do not need to set a separate payout address.  Your payout will be sent automatically to the address(es) you bought in with.  If you bought in with Ether and want your REP sent to an address different than the one you sent your Ether from, please <a href="mailto:support@augur.net">contact us</a>!
+
+              .col-sm-12
+                .center-block.estonia <a data-toggle="modal" data-target="#estonia-taxation-modal">Important information for residents of Estonia</a>
+
+            else
+             .col-sm-12
+                h4.check-back Check back here when our sale starts to purchase REP
+
+            if referralLink
+              .referral <b>Refer a friend</b> and both of you receive <b>4% bonus REP</b>!<br>Send them to <b>http://sale.augur.net/ref?id=#{ referralCode }</b>
+
+            .col-sm-12
+              h4 Ether buy-in not showing up correctly?
+              p Enter your Ethereum address you bought in with here to check your REP bought with Ether:
+              .input-group
+                input.form-control(type="text", id="check-ether-address", placeholder="Ethereum address")
+                span.input-group-btn
+                  button.btn.btn-default(type="button", onclick="saveBuyinEtherAddress($('#check-ether-address').val(), true)") Check Balance
+              ul.addressList(id="eth-buyin-address-list", style="display:none")
+
+          .logout
+            a(href="/logout") logout
+        else
+          h2 Be a part of <b>making history</b>
+          .row
+            .col-sm-6
+              .intro
+                <p>To continue funding our ambitious project of the World's first decentralized, prediction market platform, we are selling <b>Reputation</b> in Augur.</p>
+                <p>The owners of Reputation form the distributed oracle that determines the outcome of market events.  See the video below for a brief introduction of how this works and <a href="http://www.augur.net/blog/what-is-reputation">our blog post</a> for a more in-depth look.  You will own rep in proportion to the amount of funds you send, <b>plus an added bonus if you buy in early.</b> </p>
+                <p> Questions? Check out our <a href="https://augur.zendesk.com/hc/en-us"> FAQ </a> and <a href="http://slackinaugur.herokuapp.com"> Slack </a> </p>
+                <p> For more on <a href="https://www.youtube.com/watch?v=yegyih591Jo">How Augur Works</a> checkout our <a href="https://www.youtube.com/watch?v=yegyih591Jo">video</a> </p>
+            .col-sm-5.col-sm-offset-1
+              p.login
+                a.btn.btn-primary.btn-lg(href="/login") Login and get started!
+              p.disclaimer By logging in you agree to <a href="/terms.pdf">the terms</a> of the Augur crowd-sale</p>
+
+    section.video
+      .container
+        .row
+          .col-xs-12
+            <h3>Reputation in Augur</h3>
+            .wrapper
+              .video
+                iframe(src="https://www.youtube.com/embed/sCms-snzHk4" frameborder="0" allowfullscreen)
+
+
+    section.fund-management
+      .container
+        .row
+          .col-xs-12 <h3>Fund management</h3>
+        .row
+          .col-md-12
+            <p>All proceeds received are under control of a multi-sig wallet, that requires the co-signature of at least 2 signers out of 3 signers listed below.</p>
+        .row.holder-people
+          .col-sm-4.clearfix
+            .member-team
+              a(href="#")
+                span.img(data-picture data-alt="illustration")
+                  <span data-src="/images/teamMembers/augurfoundation.png"></span>
+                  <span data-src="/images/teamMembers/augurfoundation.png" data-media="(min-device-pixel-ratio: 1.5), (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 192dpi)"></span>
+                  noscript
+                    <img src="/images/img/teamMembers/augurfoundation.png" alt="illustration" />
+
+              <h4><a href="http://www.augur.net">Forecast Foundation</a></h4>
+              <p class="position">Forecast Foundation</p>
+              <p class="role"><strong>Fund Receiver</strong> </p>
+          .col-sm-4.clearfix
+            .member-team
+              a(href="https://www.bitgo.com")
+                span.img(data-picture data-alt="illustration")
+                  <span data-src="/images/teamMembers/bitgo.png"></span>
+                  <span data-src="/images/teamMembers/bitgo.png" data-media="(min-device-pixel-ratio: 1.5), (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 192dpi)"></span>
+                  noscript
+                    <a href="https://www.bitgo.com"><img src="img/teamMembers/bitgo.png" alt="illustration" /></a>
+              <h4><a href="https://www.bitgo.com">BitGo</a></h4>
+              <p class="position">Multi-Sig Provider</p>
+              <p class="role"><strong>Key Manager</strong></p>
+          .col-sm-4.clearfix
+            .member-team
+              a(href="#")
+                span.img(data-picture data-alt="illustration")
+                  <span data-src="/images/teamMembers/vitalik.png"></span>
+                  <span data-src="/images/teamMembers/vitalik.png" data-media="(min-device-pixel-ratio: 1.5), (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 192dpi)"></span>
+                  noscript
+                    <img src="img/teamMembers/bitgo.png" alt="illustration" />
+              <h4><a href="#">Vitalik Buterin</a></h4>
+              <p class="position">Founder, Ethereum</p>
+              <p class="role"><strong>Advisor</strong></p>
+
+    section.fund-allocation
+      .container
+        .row
+          .col-xs-12
+            <h3>Fund allocation</h3>
+        .row
+          .col-xs-12
+            <p>The proceeds from this software sale will be primarily used for funding the development of Augur beyond its initial release. Hard costs are found from the development of the network infrastructure, paying for servers (for our blockchain.info style solution for people who don't want to run the full client), paying for bandwidth, marketing, as well as legal and business development.</p>
+        .row
+          .col-xs-12
+            div.chart#fundAllocationChart
+
+    section.token-management
+      .container
+        .row
+          .col-xs-12
+            <h3>Token issuance</h3>
+        .row
+          .col-xs-12
+            <p>Reputation (REP) is the token that allows an individual to report on the outcome of events (and receive part of the system’s trading fees as compensation.) All 11,000,000 REP tokens that will ever exist will be distributed at the end of the software sale. Since it's an auction, the distribution of tokens will be constantly shifting until the sale ends. Instead of setting a price per rep, we're setting a limit to total rep and letting the market price the rep itself (in the true spirit of prediction markets)!
+            </p>
+        .row
+          .col-xs-12
+            div.chart#fundIssuanceChart
+
+    div(id="loading")
+      img(src="/images/loading.gif")
+
+    footer.container
+        .p <a href="/terms.pdf">Terms of Use</a><a href="/privacy.pdf">Privacy</a><a href="/purchase_agreement.pdf">Purchase Agreement</a><a href="/presale_risk_disclosure.pdf">Presale Risk Disclosure</a><span>Copyright © 2015 Forecast Foundation, OU. All Rights Reserved.</span>
+
+    .modal.ether-buyin-modal#ether-buyin-modal-1(data-backdrop="static")
+      .modal-dialog.modal-md          
+        .modal-content
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+          h4 Buying in with Ether?
+          p To buy in super easily, ignore the rest of the steps and follow the <a href="https://www.myetherwallet.com/contract-augur.html">steps at MyEtherWallet</a>, it's way simpler!
+          br
+          h5 FAQ:
+          h5 If you haven't installed Ethereum yet...
+          p We recommend <a href="https://ethereum.org/cli" target="_blank">installing geth</a>, the Go Ethereum client, as it is both the easiest client to use and has been audited for security.  WARNING: Do NOT send Ether from an exchange address.
+          h5 Need to import your Ethereum pre-sale wallet?
+          p If you participated in the Ethereum pre-sale and haven't imported your pre-sale wallet, all you need to do is open a terminal and type
+          p.code-block geth wallet import /path/to/my/presale.wallet
+          p replacing <span class="code-inline">/path/to/my/presale.wallet</span> with the location of your pre-sale wallet on your computer.
+          h5 Don't know your Ethereum address?
+          p To find your address, launch geth using the command <span class="code-inline">geth console</span>.  Once geth launches, you'll will see a prompt; this is the geth console.  Type <span class="code-inline">eth.accounts</span> at the prompt and hit Enter, and geth will display your account address (or addresses):
+          p.code-block.
+            > eth.accounts
+            ['0x0da70d5a92d6cfcd4c12e2a83950676fdf4c95f9']
+          p The long string of characters inside the quotes (in this case, <span class="code-inline">0x0da70d5a92d6cfcd4c12e2a83950676fdf4c95f9</span>) is your Ethereum address.
+          h5 Want to buy in with Alethzero? 
+          p <a href="https://augur.zendesk.com/hc/en-us/articles/204267041-How-do-I-buy-in-with-Alethzero-"> Instructions here. </a> Otherwise continue to buy with Geth (the default way to buy-in).
+          form
+            .form-group.clearfix
+              button.btn.btn-primary.pull-right(type="button", data-toggle="modal",
+              data-target="#ether-buyin-modal-2",
+              onclick="$('#ether-buyin-modal-1').modal('hide');") Got it!
+
+    .modal.ether-buyin-modal#ether-buyin-modal-2(data-backdrop="static")
+      .modal-dialog.modal-md          
+        .modal-content
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+          h5 Heads Up
+          p If you haven't updated or installed Ethereum since August 20, you need to update otherwise your chain will fail to get past <a href="https://blog.ethereum.org/2015/08/20/security-alert-consensus-issue/">block 116,522</a> and you won't be able to confirm your buy in.  To update on Linux run
+          p.code-block sudo apt-get update && sudo apt-get upgrade
+          p To update on OS X run
+          p.code-block sudo brew update && sudo brew reinstall ethereum --devel
+          p And on Windows <a href="https://build.ethdev.com/builds/Windows%20Go%20develop%20branch/Geth-Win64-latest.zip">download</a> the latest geth file.  Then after that on all operating systems run 
+          p.code-block geth removedb 
+          p followed by 
+          p.code-block geth upgradedb  
+          p You'll then have to download blocks again.
+          form
+            .form-group.clearfix
+              button.btn.btn-primary.pull-left(type="button", data-toggle="modal",
+              data-target="#ether-buyin-modal-1", onclick="$('#ether-buyin-modal-2').modal('hide');") Back
+              button.btn.btn-primary.pull-right(type="button", data-toggle="modal",
+              data-target="#ether-buyin-modal-3",
+              onclick="$('#ether-buyin-modal-2').modal('hide');") Got it!
+
+    .modal.ether-buyin-modal#ether-buyin-modal-3(data-backdrop="static")
+      .modal-dialog.modal-md
+        .modal-content
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+          h4 Ether Buy-In
+          p First, enter your Ethereum address and the amount of Ether you'd like to buy in with.
+          form
+            .form-group
+              label(for="buyin-ether-address") Ethereum address:
+              input.form-control(type="text", id="buyin-ether-address", placeholder="Enter your Ethereum address here" onkeyup="$('#start-geth-command').text('geth --unlock \"' + $('#buyin-ether-address').val() + '\" console');")
+            .form-group
+              label(for="buyin-ether-amount") Buy in amount (Ether):
+              input.form-control(type="text", id="buyin-ether-amount", placeholder="Amount of Ether to buy in with")
+          h5 Next, you need to start your Ethereum client.
+          p If you're using geth, simply open up a terminal and type
+          p.clearfix
+            button.btn.btn-success.btn-sm.pull-left(type="button", id="copy-start-geth-command", onclick="copyToClipboard('start-geth-command'); $('#copy-start-geth-command').text('Copied!')") Copy
+          p.code-block(id="start-geth-command").
+            geth --unlock "" console
+          form
+            .form-group.clearfix
+              button.btn.btn-primary.pull-left(type="button", data-toggle="modal",
+              data-target="#ether-buyin-modal-2", onclick="$('#ether-buyin-modal-3').modal('hide');") Back
+              button.btn.btn-primary.pull-right(type="button", data-toggle="modal", data-target="#ether-buyin-modal-4", onclick="$('#ether-buyin-modal-3').modal('hide'); var ethAddress = $('#buyin-ether-address').val(); if (ethAddress.slice(0, 2) !== '0x') { ethAddress = '0x' + ethAddress }; window.buyin_ether = { address: ethAddress, amount: $('#buyin-ether-amount').val() }; saveBuyinEtherAddress(ethAddress); setBuyRepText(); setGetAmountSentText();") Next
+          script.
+            if (window.ethereum_address) {
+              $("#buyin-ether-address").val(window.ethereum_address);
+              $("#start-geth-command").text('geth --unlock \"' + window.ethereum_address + '\" console');
+            }
+
+    .modal.ether-buyin-modal#ether-buyin-modal-4(data-backdrop="static")
+      .modal-dialog.modal-md
+        .modal-content
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+          h4 Ether Buy-In
+          p Now we need to connect your Ethereum client to the smart contract we've set up on the Ethereum network that handles buy-ins.  To do this, copy-and-paste the following code into your geth console:
+          p.clearfix
+            button.btn.btn-success.pull-left(type="button", id="copy-contract", onclick="copyToClipboard('eth-sale-contract'); $('#copy-contract').text('Copied!')") Copy
+          p.clearfix.code-block(id="eth-sale-contract", style="max-height:200px;overflow-y:scroll").
+            MyContract = eth.contract([{
+                "name": "addrToFunder(int256)",
+                "type": "function",
+                "inputs": [{ "name": "address", "type": "int256" }],
+                "outputs": [{ "name": "out", "type": "int256" }]
+            }, {
+                "name": "buyRep()",
+                "type": "function",
+                "inputs": [],
+                "outputs": [{ "name": "out", "type": "int256" }]
+            }, {
+                "name": "getAddrByIndex(int256)",
+                "type": "function",
+                "inputs": [{ "name": "index", "type": "int256" }],
+                "outputs": [{ "name": "out", "type": "int256" }]
+            }, {
+                "name": "getAmountSent(int256)",
+                "type": "function",
+                "inputs": [{ "name": "address", "type": "int256" }],
+                "outputs": [{ "name": "out", "type": "int256" }]
+            }, {
+                "name": "getAmtByIndex(int256)",
+                "type": "function",
+                "inputs": [{ "name": "index", "type": "int256" }],
+                "outputs": [{ "name": "out", "type": "int256" }]
+            }, {
+                "name": "getBlockNumByIndex(int256)",
+                "type": "function",
+                "inputs": [{ "name": "index", "type": "int256" }],
+                "outputs": [{ "name": "out", "type": "int256" }]
+            }, {
+                "name": "getBlockNumSent(int256)",
+                "type": "function",
+                "inputs": [{ "name": "address", "type": "int256" }],
+                "outputs": [{ "name": "out", "type": "int256" }]
+            }, {
+                "name": "getFunderNum()",
+                "type": "function",
+                "inputs": [],
+                "outputs": [{ "name": "out", "type": "int256" }]
+            }, {
+                "name": "getFundsRaised()",
+                "type": "function",
+                "inputs": [],
+                "outputs": [{ "name": "out", "type": "int256" }]
+            }]);
+            sale = MyContract.at('0xe28e72fcf78647adce1f1252f240bbfaebd63bcc');
+          h5 To complete your purchase,
+          p copy-and-paste the following code into your geth console:
+          p.clearfix
+            button.btn.btn-success.btn-sm.pull-left(type="button", id="copy-buy-rep", onclick="copyToClipboard('sale-buy-rep'); $('#copy-buy-rep').text('Copied!')") Copy
+          p.code-block(id="sale-buy-rep")
+          form
+            .form-group.clearfix
+              button.btn.btn-primary.pull-left(type="button", data-toggle="modal",
+                data-target="#ether-buyin-modal-3", onclick="$('#ether-buyin-modal-4').modal('hide');") Back
+              button.btn.btn-primary.pull-right(type="button",
+              data-toggle="modal",
+              data-target="#ether-buyin-modal-5",
+              onclick="$('#ether-buyin-modal-4').modal('hide');") Verify your purchase
+
+    .modal.fade.ether-buyin-modal#ether-buyin-modal-5(data-backdrop="static")
+      .modal-dialog.modal-md
+        .modal-content
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+          h4 Verify your purchase
+          h5 Let's check to make sure your Ether was successfully sent.
+          p Wait about 30 seconds, then copy-and-paste this into geth:
+          p.clearfix
+            button.btn.btn-success.btn-sm.pull-left(type="button", id="copy-get-amount-sent", onclick="copyToClipboard('get-amount-sent'); $('#copy-get-amount-sent').text('Copied!')") Copy
+          p.code-block(id="get-amount-sent")
+          h5 If geth displays the amount you just sent...
+          p Congratulations!  You've successfully completed your purchase.  Your Reputation tokens will be available when Augur launches (current estimate: Q1 2016) at the address you chose to buy in with. Thanks for helping us bring the wisdom of the crowd to everyone!
+          h5 If geth doesn't show the amount you sent...
+          p First, wait another minute and try again; sometimes the network can be a bit slow.  If your purchase still isn't showing up, please contact us using the chat window in the lower left-hand corner of your screen, or shoot us an email at <a href="mailto:support@augur.net">support@augur.net</a> and we'll get back to you as quick as we can!  Note: a common cause of this is due to not being on the latest Geth - 1.1.0, if you've updated or installed it after August 20 you're all set.
+          form
+            .form-group.clearfix
+              button.btn.btn-primary.pull-left(type="button", data-toggle="modal",
+                data-target="#ether-buyin-modal-4", onclick="$('#ether-buyin-modal-5').modal('hide');") Back
+              button.pull-right(type="button", class="btn btn-primary", onclick="$('#ether-buyin-modal-5').modal('hide');") Done            
+
+    .modal#create-account-modal
+      .modal-dialog.modal-sm
+        .modal-content
+          h4 Create a new Ethereum address
+          p <b>Enter and confirm your passphrase for this address.</b>
+          form
+            .form-group
+              input(type="password", class="form-control", id="passphrase", placeholder="Enter your passphrase", toggle="popover", data-placement="top", data-trigger="manual", title="Invalid Passphrase", data-content="Please enter a valid passphrase.")
+            .form-group
+              input(type="password", class="form-control", id ="confirm-passphrase", placeholder="Confirm your passphrase", toggle="popover", data-placement="bottom", data-trigger="manual", title="Invalid Passphrase", data-content="Passphrase doesn't match.")
+            .form-group
+              .disclaimer
+                p <b>NOTE:</b> There is no recovery option for this passphrase, so take the neccessary precautions.  You may, however, create a new address and use that instead up until Augur's official launch.
+            .form-group.clearfix
+              button.pull-right(type="button", class="btn btn-primary", onclick="createEthereumKey()") Create
+
+    .modal.fade#download-account-key(data-backdrop="static")
+      .modal-dialog
+        .modal-content
+          h4 IMPORTANT!
+          p A unique Ethereum address and private key have been <b>successfully created</b>.
+          p For your security, we will not store this key or the password associated with it. You <b>MUST</b> save this key so it can be imported into Augur or Ethereum to access your account and make transactions in the future.
+          p Save this key to a <b>secure place</b> and make a <b>backup</b>.  If for any reason you lose this key, you may create a new one here up until Augur's offical launch.  Note: it may take up to 30 seconds to email the key before refreshing, don't exit out of the window.
+          if mobile
+            p Since you're currently on a mobile platform, we'll email your key to #{ userEmail }.  If you'd prefer to download the key as a file, logout and recreate your key on another platform.
+            .clearfix
+              a.pull-right.save-button(type="button", class="btn btn-default", data-dismiss="modal") Cancel
+              a.pull-right.save-button(type="button", class="btn btn-primary", onclick="saveKey()") Email Key
+          else
+            .clearfix.footer
+              a.pull-right.save-button(type="button", class="btn btn-primary", onclick="saveKey()") Save
+              label.checkbox-inline.pull-right <input type='checkbox' id='email-key' value="email" checked /> Email a copy of this key to <b>#{ userEmail }</b>
+
+    .modal#estonia-taxation-modal
+      .modal-dialog.modal-sm
+        .modal-content
+          h4 Tax Implications for Estonian Residents
+          p Due to Estonia's taxation of cryptocurrency purchases, special treatment needs to be taken for the sale of REP in Augur.  If you are a resident of Estonia, please email Augur at <a href="mailto:support@augur.net">support@augur.net</a> and we'll provide you with resources required to make a purchase.
+          .clearfix
+            a.pull-right(type="button", class="btn btn-default", data-dismiss="modal") Got it
+
+    .modal#pay-with-bitcoin-modal
+      .modal-dialog.modal-sm
+        .modal-content
+          p.btc-desc Purchases using BTC can be made to the following address.<br>This address is unique to your account.
+          a.btc-uri(href="#{ buyUri }" data-toggle="popver", data-trigger="hover", data-placement="left", data-content="Send Bitcoin to this address and you'll get REP in proportion to the amount") #{ btcAddress }
+          img.btc-qrcode.center-block(src="#{ qrCode }")
+          .clearfix
+            a.pull-right(type="button", class="btn btn-default btn-sm", data-dismiss="modal") Close
+
+    script(src="/js/keythereum.js")
+
+    script.
+
+      var key, keyJSON;
+
+      function editEthereumAddress() {
+
+        $('section.action .ethereum-address form.set').hide();
+        $('section.action .ethereum-address form.unset').show();
+      }
+
+      function cancelEdit() {
+
+        $('section.action .ethereum-address form.unset').hide();
+        $('section.action .ethereum-address form.set').show();
+      }
+
+      function cancelEdit() {
+
+        $('section.action .ethereum-address form.unset').hide();
+        $('section.action .ethereum-address form.set').show();
+      }
+
+      $('#passphrase').on('input', function() {
+        $('#passphrase').popover('hide')
+      });
+
+      $('#confirm-passphrase').on('input', function() {
+        $('#confirm-passphrase').popover('hide')
+      });
+
+      function copyToClipboard(elementId) {
+
+        // create a "hidden" input
+        var aux = document.createElement("input");
+
+        // assign it the value of the specified element
+        aux.setAttribute("value", document.getElementById(elementId).innerHTML);
+
+        // append it to the body
+        document.body.appendChild(aux);
+
+        // highlight its content
+        aux.select();
+
+        // copy the highlighted text
+        document.execCommand("copy");
+
+        // remove it from the body
+        document.body.removeChild(aux);
+
+      }
+
+      function saveBuyinEtherAddress(address, loading) {
+        if (address) {
+          if (loading) $('#loading').show();
+          $.post('/save-buyin-ether-address', {
+            address: address,
+            userhref: user
+          }, function (data) {
+            if (data) {
+              try {
+                data = JSON.parse(data);
+                $('#rep-amount-display').text(data.repAmount);
+                $('#rep-percentage-display').text(data.repPercentage);
+                $('#eth-purchase-total').text(data.ethBalance.toString());
+              } catch (ex) {
+                console.error(ex);
+              }
+            }
+            $('#loading').hide();
+          });
+        }
+      }
+
+      function saveReceivingEtherAddress(address) {
+        if (address) {
+          $.post('/save-receiving-ether-address', {
+            address: address,
+            userhref: user
+          });
+        }
+      }
+
+      function setBuyRepText() {
+        $('#sale-buy-rep').text(
+          "sale.buyRep({\n"+
+          "    from: \"" + buyin_ether.address + "\",\n"+
+          "    value: web3.toWei('" + buyin_ether.amount + "', \"ether\"),\n"+
+          "    gas: 150000\n"+
+          "});"
+        );
+      }
+
+      function setGetAmountSentText() {
+        $('#get-amount-sent').text(
+          "web3.fromWei(\n"+
+          "    sale.getAmountSent.call(\"" + buyin_ether.address + "\"),\n"+
+          "    \"ether\"\n"+
+          ").toFixed();"
+        );
+      }
+
+      function createEthereumKey() {
+
+        var passphrase = $('#passphrase').val();
+        var confirmPassphrase = $('#confirm-passphrase').val();
+
+        if (passphrase == '') {
+
+          $('#passphrase').popover('show');
+
+        } else if (passphrase != confirmPassphrase) {
+
+          $('#confirm-passphrase').popover('show');
+
+        } else {
+
+          $('#create-account-modal button').text('Generating...').attr('disabled', 'disabled');
+
+          setTimeout(function () {
+            var dk = keythereum.create();
+
+            key = keythereum.dump(passphrase, dk.privateKey, dk.salt, dk.iv);
+            keyJSON = JSON.stringify(key);
+            window.ethereum_address = key.address;
+
+            saveReceivingEtherAddress(key.address);
+
+            // save ethereum address
+            $.post('/', {'ethereumAddress': key.address}, function () {
+
+              // request user to save private key if we successfully stored address
+              $('#create-account-modal').modal('hide');
+              $('#download-account-key').modal('show');
+
+            });
+          }, 100);
+        }
+      }
+
+      function saveKey() {
+
+        var link = document.createElement('a');
+        var uri = 'data:application/octet-stream,' + keyJSON;
+        if (typeof link.download === 'string') {
+          link.href = uri;
+          link.download = "UTC--" + new Date().toISOString() + "--" + key.address;
+          console.log('ok');
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+        } else {
+          filename = "UTC--" + new Date().toISOString() + "--" + key.address;
+          try {
+            var isFileSaverSupported = !!new Blob;
+            var blob = new Blob([keyJSON], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, filename);
+          } catch (e) {
+            window.open(uri);
+          }
+        }
+
+        // email key to user
+
+        if ( $('#email-key').is(':checked') ) {
+
+          $.post('/email_key', {'key': keyJSON, 'address': key.address}).done(function(result) {
+
+            //console.log(result);
+
+            // close modal and refresh page
+            $('#download-account-key').modal('hide');
+            location.href = '/';
+
+          }).fail(function(result) {
+
+            //console.error(result);
+
+            // close modal and refresh page
+            $('#download-account-key').modal('hide');
+            location.href = '/';
+
+          });
+        }
+        else {
+          // close modal and refresh page
+          $('#download-account-key').modal('hide');
+          location.href = '/';
+        }
+      }
+
+    if !saleStarted
+      script.
+        var now = new Date();
+        var saleDate = new Date(Date.UTC(2015, 07, 17, 16, 00, 00));
+        var secondsUntilSale = (saleDate - now) / 1000;
+        var timer = $('.timer').FlipClock(secondsUntilSale, {
+          countdown: true,
+          clockFace: 'DailyCounter'
+        });
+
+    script.
+      var $_Tawk_API={},$_Tawk_LoadStart=new Date();
+      (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/55ac011429ac8aa732362572/default';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+      })();
+
+    if user
+      script.
+        window.user = "#{ user.href }";
+        var buyinEthereumAddress = '!{ buyinEthereumAddress }';
+        if (buyinEthereumAddress !== '') {
+          buyinEthereumAddress = JSON.parse(buyinEthereumAddress);
+          console.log(buyinEthereumAddress);
+          if (buyinEthereumAddress && buyinEthereumAddress.length &&
+              buyinEthereumAddress.constructor === Array)
+          {
+            $('#eth-buyin-address-list').empty();
+            for (var i = 0, len = buyinEthereumAddress.length; i < len; ++i) {
+              $('#eth-buyin-address-list').append(
+                $('<li />').text(buyinEthereumAddress[i])
+              );
+            }
+          }
+        } else {
+          console.log("buy in Ethereum address not found");
+        }
+
+    script.
+
+      $(document).ready(function() {
+
+        google.load("visualization", "1", {packages:["corechart"]});
+
+        google.setOnLoadCallback(drawAllocationChart);
+        google.setOnLoadCallback(drawIssuanceChart);
+
+        function drawAllocationChart() {
+
+          try {
+            var data = google.visualization.arrayToDataTable([
+              ['Budget', 'Percentage'],
+              ['Development & Operations', 75],
+              ['Legal Contingency Fund', 15],
+              ['Marketing & Community Outreach', 10]
+            ]);
+
+            var options = {
+              height: 400,
+              chartArea: { height: 300 }
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('fundAllocationChart'));
+            chart.draw(data, options);
+          
+          } catch (ex) {
+            $('#fundAllocationChart').html('<img src=\"/images/chart1.png\" />');
+          }
+        }
+
+        function drawIssuanceChart() {
+
+          try {
+            var data = google.visualization.arrayToDataTable([
+              ['Issued', 'Percentage'],
+              ['Public Software Sale', 80],
+              ['Early Angels & Founding Team', 16],
+              ['Forecast Foundation', 4]
+            ]);
+
+            var options = {
+              height: 400,
+              chartArea: { height: 300 }
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('fundIssuanceChart'));
+            chart.draw(data, options);
+
+          } catch (ex) {
+            $('#fundIssuanceChart').html('<img src=\"/images/chart2.png\" />');
+          }
+        }
+
+        $("[data-toggle=popover]").popover();
+
+        var addr = "3N6S9PLVizPuf8nZkhVzp11PKhTiuTVE6R"
+        var url = 'https://api.chain.com/v1/bitcoin';
+        url += '/addresses/' + addr;
+        url += '?key=de4b1f306bbe25f98dd23c8c02c703c8';
+        var amount = 19053.92;
+        $('.amount-raised').text(amount.toPrecision(10));
+        displayUsdEquivalent(
+          amount,
+          #{ totalEther },
+          #{ ethBtcExchangeRate },
+          #{ btcUsdExchangeRate }
+        );
+
+
+        function displayUsdEquivalent(totalBtc, totalEth, ethBtcExchangeRate, btcUsdExchangeRate) {
+          var usd = (totalEth*ethBtcExchangeRate + totalBtc)*btcUsdExchangeRate;
+          try {
+            usd = (Math.round(usd * 100) / 100).toLocaleString();
+          } catch (ex) {
+            usd = usd.toFixed(2);
+          }
+          $('#usd-equivalent').text(usd);
+        }
+
+        try {
+          displayUsdEquivalent(
+            Number($('.amount-raised').text()),
+            #{ totalEther },
+            #{ ethBtcExchangeRate },
+            #{ btcUsdExchangeRate }
+          );
+        } catch (ex) {
+          console.log(ex);
+        }
+
+        function checkSaleStart() {
+
+        }
+      });
