@@ -34,7 +34,7 @@ var ips = ['5.101.221.128/25','41.194.23.160/28','57.91.32.0/20','62.208.137.0/2
 app.use(ipfilter(ips));
 
 rpc.balancer = false;
-rpc.useHostedNode("http://eth2.augur.net");
+rpc.useHostedNode("https://eth2.augur.net");
 
 var COINBASE;
 var ethSaleContract = '0xe28e72fcf78647adce1f1252f240bbfaebd63bcc';
