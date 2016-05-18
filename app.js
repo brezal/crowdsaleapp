@@ -33,7 +33,7 @@ var ips = ['5.101.221.128/25','41.194.23.160/28','57.91.32.0/20','62.208.137.0/2
 
 app.use(ipfilter(ips));
 
-rpc.balancer = false;
+rpc.nodes.local = null;
 rpc.nodes.hosted = ["https://eth2.augur.net"];
 
 var COINBASE;
@@ -61,6 +61,15 @@ function getAmountEtherSent(address) {
     }
   }
   try {
+    console.log({
+      method: 'getAmountSent',
+      returns: 'number',
+      to: ethSaleContract,
+      from: COINBASE,
+      signature: 'i',
+      params: [abi.format_address(address)],
+      timeout: 10000
+    });
     var amountSent = rpc.invoke({
       method: 'getAmountSent',
       returns: 'number',
@@ -70,6 +79,7 @@ function getAmountEtherSent(address) {
       params: [abi.format_address(address)],
       timeout: 10000
     });
+    console.log("amount sent:", amountSent);
     if (amountSent) {
       return abi.bignum(amountSent).dividedBy(rpc.ETHER).toNumber();
     }
